@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>네트워크관리사 2급 CBT</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="exams.js"></script>
+    <script defer src="explanations.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <header class="page-header">
+      <p>기출문제 연습</p>
+      <h1>네트워크관리사 2급 CBT</h1>
+      <form id="setup">
+        <label for="exam">시험 회차</label>
+        <select id="exam"></select>
+        <button type="submit" class="primary" id="start">시험 시작</button>
+      </form>
+    </header>
+    <main>
+      <p id="welcome">
+        회차를 선택하고 시험을 시작하세요. ‘전체’는 모든 회차에서 무작위로
+        50문항을 고릅니다. 시작할 때마다 문제와 보기 순서를 섞습니다.
+      </p>
+      <section id="session" hidden aria-label="시험">
+        <div class="status" id="status" role="status"></div>
+        <p id="score" role="status" hidden></p>
+        <p id="result" role="status" hidden></p>
+        <div class="layout">
+          <article class="panel" aria-labelledby="stem">
+            <p class="subject" id="subject"></p>
+            <h2 id="stem" tabindex="-1"></h2>
+            <div id="figures"></div>
+            <fieldset id="choices">
+              <legend>보기</legend>
+              <div id="options"></div>
+            </fieldset>
+            <p id="feedback" hidden></p>
+            <section
+              id="explanation"
+              class="explanation"
+              hidden
+              aria-labelledby="explanationTitle"
+            >
+              <h3 id="explanationTitle">해설</h3>
+              <p id="correctAnswer" class="correct-answer"></p>
+              <p id="explanationText"></p>
+              <a
+                id="explanationSource"
+                target="_blank"
+                rel="noopener noreferrer"
+                hidden
+              ></a>
+            </section>
+            <div class="actions">
+              <button id="previous" type="button">이전</button>
+              <button id="next" type="button">다음</button>
+              <button id="submit" type="button" class="primary">
+                제출 및 채점
+              </button>
+            </div>
+          </article>
+          <nav class="panel" aria-label="문제 이동">
+            <h2>문제 이동</h2>
+            <p class="hint" id="navHint">
+              표시가 채워진 번호는 응답한 문제입니다.
+            </p>
+            <div id="navigator"></div>
+          </nav>
+        </div>
+      </section>
+    </main>
+    <footer>문제 출처 · 전자문제집 CBT (www.comcbt.com)</footer>
+  </body>
+</html>

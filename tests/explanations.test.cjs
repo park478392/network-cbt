@@ -23,14 +23,17 @@ class Element {
 }
 
 const elements = new Map();
+const documentEvents = {};
 const root = path.resolve(__dirname, '..');
 const context = vm.createContext({
   assert,
+  documentEvents,
   assertImageExists(source) {
     const image = fs.readFileSync(path.join(root, source));
     assert.equal(image.subarray(0, 3).toString(), 'GIF', source);
   },
   document: {
+    addEventListener(name, handler) { documentEvents[name] = handler; },
     getElementById(id) {
       if (!elements.has(id)) elements.set(id, new Element());
       return elements.get(id);
@@ -109,6 +112,52 @@ for (const [date, questions] of Object.entries(EXAMS)) {
 assert.equal(Object.keys(EXAMS).length, 12);
 assert.equal(covered, 600);
 assert.equal(Object.values(EXAMS).flat().flatMap(q => q.images).length, 109);
+function pressKey(key, overrides = {}) {
+  const event = {
+    key,
+    target: { closest: () => null },
+    prevented: false,
+    preventDefault() { this.prevented = true; },
+    ...overrides,
+  };
+  documentEvents.keydown(event);
+  return event;
+}
+attempt = undefined;
+assert.equal(pressKey('1').prevented, false);
+startExam('2023-02-26');
+for (let position = 1; position <= 4; position++) {
+  const question = attempt.questions[0];
+  assert.equal(pressKey(String(position)).prevented, true);
+  assert.equal(attempt.answers.get(question.key), question.choices[position - 1].id);
+  const options = byId('options').children;
+  assert.equal(options[position - 1].children[0].checked, true);
+  assert.equal(options.filter(option => option.children[0].checked).length, 1);
+}
+assert.equal(pressKey('Enter').prevented, true);
+assert.equal(attempt.index, 1);
+assert.equal(pressKey(' ').prevented, true);
+assert.equal(attempt.index, 2);
+for (const overrides of [
+  { repeat: true }, { isComposing: true }, { ctrlKey: true },
+  { altKey: true }, { metaKey: true },
+  { target: { closest: () => ({}) } },
+]) {
+  assert.equal(pressKey('Enter', overrides).prevented, false);
+  assert.equal(pressKey('1', overrides).prevented, false);
+  assert.equal(attempt.index, 2);
+  assert.equal(attempt.answers.has(attempt.questions[2].key), false);
+}
+goTo(49);
+pressKey('Enter');
+pressKey(' ');
+assert.equal(attempt.index, 49);
+attempt.submitted = true;
+assert.equal(pressKey('1').prevented, false);
+assert.equal(attempt.answers.has(attempt.questions[49].key), false);
+goTo(0);
+pressKey('Enter');
+assert.equal(attempt.index, 1);
 startExam('all');
 attempt.submitted = true;
 for (let i = 0; i < attempt.questions.length; i++) {

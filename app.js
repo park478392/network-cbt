@@ -175,6 +175,23 @@ byId('setup').addEventListener('submit', (event) => {
 });
 byId('previous').addEventListener('click', () => goTo(attempt.index - 1));
 byId('next').addEventListener('click', () => goTo(attempt.index + 1));
+document.addEventListener('keydown', (event) => {
+  if (!attempt || event.repeat || event.isComposing ||
+      event.ctrlKey || event.altKey || event.metaKey) return;
+  if (event.target.closest('select, textarea, button, a, [contenteditable], input:not([type="radio"])')) return;
+
+  if (['1', '2', '3', '4'].includes(event.key)) {
+    if (attempt.submitted) return;
+    event.preventDefault();
+    const question = attempt.questions[attempt.index];
+    const choice = question.choices[Number(event.key) - 1];
+    attempt.answers.set(question.key, choice.id);
+    renderQuestion();
+  } else if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    goTo(attempt.index + 1);
+  }
+});
 byId('submit').addEventListener('click', () => {
   if (attempt.submitted) return;
   const unanswered = attempt.questions.length - attempt.answers.size;

@@ -56,6 +56,8 @@ legend { font-weight: 700; margin-bottom: .5rem; }
 #navigator button { padding: .2rem; }
 #navigator .answered { background: #dcefff; }
 #navigator [aria-current] { border: 2px solid #075889; font-weight: 700; }
+#navigator button.wrong { background: #b42332; color: white; border-color: #861b27; font-weight: 700; }
+#navigator button.wrong:hover { background: #921c29; border-color: #68131d; }
 footer { padding-block: .8rem 1.5rem; font-size: .88rem; }
 @media (max-width: 760px) {
   .layout { grid-template-columns: minmax(0, 1fr); }

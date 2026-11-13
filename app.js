@@ -72,6 +72,7 @@ function renderProgress() {
     button.type = 'button';
     button.textContent = `${i + 1}${symbol}`;
     button.classList.toggle('answered', Boolean(selected));
+    button.classList.toggle('wrong', submitted && Boolean(selected) && !correct);
     button.setAttribute('aria-label', `${i + 1}번, ${status}`);
     if (i === index) button.setAttribute('aria-current', 'step');
     button.addEventListener('click', () => goTo(i));

@@ -106,9 +106,9 @@ for (const [date, questions] of Object.entries(EXAMS)) {
   startExam(date);
   assert.equal(byId('explanation').hidden, true, 'Restart hides explanation');
 }
-assert.equal(Object.keys(EXAMS).length, 8);
-assert.equal(covered, 400);
-assert.equal(Object.values(EXAMS).flat().flatMap(q => q.images).length, 70);
+assert.equal(Object.keys(EXAMS).length, 12);
+assert.equal(covered, 600);
+assert.equal(Object.values(EXAMS).flat().flatMap(q => q.images).length, 109);
 startExam('all');
 attempt.submitted = true;
 for (let i = 0; i < attempt.questions.length; i++) {
@@ -123,4 +123,4 @@ assert.ok(html.indexOf('explanations.js') < html.indexOf('app.js'));
 for (const id of ['explanation', 'correctAnswer', 'explanationText', 'explanationSource']) {
   assert.ok(html.includes(`id="${id}"`), `Missing HTML element: ${id}`);
 }
-console.log('PASS: 8 exams, 400 explanations, 4 choice positions, wrong/unanswered/correct states, source reset, restart, mixed exam.');
+console.log('PASS: 12 exams, 600 explanations, 4 choice positions, wrong/unanswered/correct states, source reset, restart, mixed exam.');
